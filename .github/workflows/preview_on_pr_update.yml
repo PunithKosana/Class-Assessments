@@ -1,33 +1,29 @@
-name: preview_on_pr_update
+name: Update README for PR Branch
 
 on:
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize]
 
 jobs:
-  preview:
-    # only run when updating an 'Open' PR
-    if: github.event.pull_request.state == 'open'
-    uses: jalantechnologies/github-ci/.github/workflows/ci.yml@v2.5
-    concurrency:
-      group: ci-preview-${{ github.event.pull_request.head.ref }}
-      cancel-in-progress: true
-    with:
-      analyze_base: main
-      app_name: boilerplate-mern
-      app_env: preview
-      app_hostname: '{1}.preview.platform.jalantechnologies.com'
-      branch: ${{ github.event.pull_request.head.ref }}
-      build_args: |
-        NODE_CONFIG_ENV=preview
-      checks: "['npm:lint', 'compose:test', 'compose:e2e']"
-      docker_registry: ${{ vars.DOCKER_REGISTRY }}
-      docker_username: ${{ vars.DOCKER_USERNAME }}
-      pull_request_number: ${{ github.event.number }}
-      sonar_host_url: ${{ vars.SONAR_HOST_URL }}
-      do_cluster_id: ${{ vars.DO_CLUSTER_ID }}
-    secrets:
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
-      doppler_token: ${{ secrets.DOPPLER_PREVIEW_TOKEN }}
-      do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
-      sonar_token: ${{ secrets.SONAR_TOKEN }}
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Replace placeholders in README
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          REPO_NAME="${{ github.repository }}"
+
+          sed -i "s|__BRANCH__|$BRANCH_NAME|g" README.md
+          sed -i "s|__REPO__|$REPO_NAME|g" README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am "Update README with PR branch details" || echo "No changes to commit"
+          git push
+
