@@ -9,9 +9,7 @@ Class Assessements Given on my DevOps Training
 
 | Build | Tests | Code Coverage |
 |--------|--------|--------|
-| ![Build Status](https://img.shields.io/github/actions/workflow/status/__REPO__/.github/workflows/preview_on_pr_update.yml?branch=__BRANCH__&label=Build&job=build) |
-![Test Status](https://img.shields.io/github/actions/workflow/status/__REPO__/.github/workflows/preview_on_pr_update.yml?branch=__BRANCH__&label=Tests&job=checks) |
-![Code Coverage](https://img.shields.io/badge/Code%20Coverage-90%25-success?style=flat) |
+| ![Build Status](https://img.shields.io/github/actions/workflow/status/__REPO__/.github/workflows/preview_on_pr_update.yml?branch=__BRANCH__&label=Build&job=build) |![Test Status](https://img.shields.io/github/actions/workflow/status/__REPO__/.github/workflows/preview_on_pr_update.yml?branch=__BRANCH__&label=Tests&job=checks) |![Code Coverage](https://img.shields.io/badge/Code%20Coverage-90%25-success?style=flat) |
 
 
 
