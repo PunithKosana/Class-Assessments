@@ -1,0 +1,28 @@
+name: Update README for PR Branch
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Replace placeholders in README
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          REPO_NAME="${{ github.repository }}"
+
+          sed -i "s|__BRANCH__|$BRANCH_NAME|g" README.md
+          sed -i "s|__REPO__|$REPO_NAME|g" README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am "Update README with PR branch details" || echo "No changes to commit"
+          git push
